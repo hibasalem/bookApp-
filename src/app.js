@@ -5,7 +5,9 @@ import MyFavoriteBooks from './myFavoriteBooks';
 import Footer from './footer';
 import { withAuth0 } from '@auth0/auth0-react';
 import Login from './login';
-import Profile from './ Profile';
+import Profile from './Profile';
+import Button from 'react-bootstrap/Button';
+
 
 import {
   BrowserRouter as Router,
