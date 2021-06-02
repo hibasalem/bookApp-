@@ -19,7 +19,8 @@ class BestBooks extends React.Component {
             bookName: "",
             bookDiscription: "",
             bookImageUrl: "",
-            server: process.env.REACT_APP_SERVER,
+            // server: process.env.REACT_APP_SERVER,
+            server: "https://book-app-hibasalem.herokuapp.com",
             booksData: [],
             showUpdateForm: false,
             index: 0,
@@ -29,7 +30,7 @@ class BestBooks extends React.Component {
     componentDidMount = async () => {
 
         const { user } = this.props.auth0;
-        let serverRoute = process.env.REACT_APP_SERVER;
+        let serverRoute = "https://book-app-hibasalem.herokuapp.com";
         const booksUrl = `${serverRoute}/books?email=${user.email}`;
         let result = await axios.get(booksUrl);
         this.setState({
@@ -61,7 +62,7 @@ class BestBooks extends React.Component {
 
         console.log();
 
-        let newBookreq = await axios.delete(`http://localhost:3001/deleteBook/${index}`, { params: user })
+        let newBookreq = await axios.delete(`${this.state.server}/${index}`, { params: user })
 
         this.setState({
             books: newBookreq.data
