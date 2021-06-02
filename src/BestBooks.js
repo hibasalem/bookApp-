@@ -20,7 +20,7 @@ class BestBooks extends React.Component {
             bookDiscription: "",
             bookImageUrl: "",
             // server: process.env.REACT_APP_SERVER,
-            server: "https://book-app-hibasalem.herokuapp.com",
+            server: "https://canofbookshiba.herokuapp.com",
             booksData: [],
             showUpdateForm: false,
             index: 0,
@@ -30,7 +30,7 @@ class BestBooks extends React.Component {
     componentDidMount = async () => {
 
         const { user } = this.props.auth0;
-        let serverRoute = "https://book-app-hibasalem.herokuapp.com";
+        let serverRoute = "https://canofbookshiba.herokuapp.com";
         const booksUrl = `${serverRoute}/books?email=${user.email}`;
         let result = await axios.get(booksUrl);
         this.setState({
