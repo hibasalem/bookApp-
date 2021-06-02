@@ -7,6 +7,7 @@ import CardColumns from 'react-bootstrap/CardColumns'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import BookFormModal from './BookFormModal';
 import Button from 'react-bootstrap/Button';
+import UpdateFormModal from './UpdateFormModal';
 
 
 class BestBooks extends React.Component {
@@ -20,6 +21,8 @@ class BestBooks extends React.Component {
             bookImageUrl: "",
             server: process.env.REACT_APP_SERVER,
             booksData: [],
+            showUpdateForm: false,
+            index: 0,
         }
     }
 
@@ -38,14 +41,14 @@ class BestBooks extends React.Component {
     addBooks = async (event) => {
 
         event.preventDefault();
-        const bookFormData = {
 
+        const bookFormData = {
             userEmail: this.props.auth0.user.email,
             bookName: this.state.bookName,
             bookDiscription: this.state.bookDiscription,
             bookImageUrl: this.state.bookImageUrl
-
         }
+
         const newBook = await axios.post(`${this.state.server}/addBooks`, bookFormData)
         this.setState({
             books: newBook.data,
@@ -65,6 +68,59 @@ class BestBooks extends React.Component {
         })
     }
 
+
+
+    updateBooks = async (event) => {
+        event.preventDefault();
+
+        const bookFormDatatoUpdate = {
+
+            email: this.props.auth0.user.email,
+            name: this.state.bookName,
+            discription: this.state.bookDiscription,
+            imageUrl: this.state.bookImageUrl
+
+        }
+
+        console.log("bookFormDatatoUpdate",bookFormDatatoUpdate)
+        console.log("index" ,this.state.index)
+        
+        let booksdataUpdate = await axios.put(`${this.state.server}/updateBooks/${this.state.index}`, bookFormDatatoUpdate)
+        console.log("booksdataUpdate" ,booksdataUpdate)
+
+        this.setState({
+            books: booksdataUpdate.data,
+            showUpdateForm: false,
+        })
+
+    }
+
+    showUpdate = (idx) => {
+
+        console.log("show update")
+
+        const bookToUpdate = this.state.books.filter((val, index) => {
+            return idx === index;
+        })
+
+        console.log("before",bookToUpdate)
+
+
+        this.setState({
+            showUpdateForm: true,
+            index: idx,
+            bookName: bookToUpdate[0].name,
+            bookDiscription: bookToUpdate[0].discription,
+            bookImageUrl: bookToUpdate[0].imageUrl,
+        
+        })
+
+        console.log("after",this.state.bookName)
+
+    }
+
+
+
     updateBookName = (event) => {
         this.setState({
             bookName: event.target.value
@@ -80,6 +136,7 @@ class BestBooks extends React.Component {
             bookImageUrl: event.target.value
         })
     }
+
     handleShow = () => {
         this.setState({
             show: true,
@@ -90,6 +147,13 @@ class BestBooks extends React.Component {
             show: false,
         })
     }
+
+    handleCloseUpdate = () => {
+        this.setState({
+            showUpdateForm: false,
+        })
+    }
+
 
     render() {
 
@@ -127,12 +191,34 @@ class BestBooks extends React.Component {
                                                 {item.discription}
                                             </Card.Text>
                                             <Button variant="primary" onClick={() => this.deleteBook(idx)}>Delete</Button>
+                                            <Button variant="primary" onClick={() => this.showUpdate(idx)}>Update</Button>
                                         </Card.Body>
                                     </Card>
                                 </div>
                             )
                         })}
                 </CardColumns>
+
+                {this.state.showUpdateForm &&
+
+                    <UpdateFormModal
+                        showUpdateFormValue={this.state.showUpdateForm}
+                        handleCloseUpdate={this.handleCloseUpdate}
+
+                        updateBooks={this.updateBooks}
+
+                        updateBookNameEdit={this.updateBookName}
+                        updateBookDiscriptionEdit={this.updateBookDiscription}
+                        updateBookImageUrlEdit={this.updateBookImageUrl}
+
+                        bookName={this.state.bookName}
+                        bookDiscription={this.state.bookDiscription}
+                        bookImageUrl={this.state.bookImageUrl}
+                    />
+                }
+
+
+
             </>
         )
     }
