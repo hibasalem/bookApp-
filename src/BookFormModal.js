@@ -2,27 +2,19 @@ import React from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import { withAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
-// import Carousel from 'react-bootstrap/Carousel'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-
-
-
 class BookFormModal extends React.Component {
-
-
     render() {
         return (
             <>
-
                 <Modal show={this.props.showvalue} >
                     <Modal.Header closeButton onClick={this.props.hideValue} >
                         <Modal.Title>Modal heading</Modal.Title>
                     </Modal.Header>
-
                     <Modal.Body>
 
                         <Form onSubmit={(e) => this.props.addBooks(e)}
@@ -56,9 +48,6 @@ class BookFormModal extends React.Component {
                 </Modal>
             </>
         )
-
-
     }
-
 }
 export default withAuth0(BookFormModal);
