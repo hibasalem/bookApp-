@@ -59,10 +59,7 @@ class BestBooks extends React.Component {
     deleteBook = async (index) => {
         let { user } = this.props.auth0;
         user = { email: user.email }
-
-        console.log();
-
-        let newBookreq = await axios.delete(`${this.state.server}/${index}`, { params: user })
+        let newBookreq = await axios.delete(`${this.state.server}/deleteBook/${index}`, { params: user })
 
         this.setState({
             books: newBookreq.data
